@@ -20,4 +20,4 @@ Route::resource('users','UserController');
 
 Route::get('login','SessionController@create')->name('login');
 Route::post('login','SessionController@store')->name('login');
-Route::post('logout','SessionController@destroy')->name('logout');
+Route::get('logout','SessionController@destroy')->name('logout');
