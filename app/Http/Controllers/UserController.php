@@ -3,10 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
 class UserController extends Controller
 {
     public function create(){
         return view('users.create');
     }
+
+    public function show(User $user){
+        //dump($user);die;
+        return view('users.show',compact('user'));
+    }
+
+
 }
