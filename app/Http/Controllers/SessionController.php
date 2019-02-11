@@ -7,6 +7,12 @@ use Auth;
 use App\Models\User;
 class SessionController extends Controller
 {
+    public function __construct(){
+        //只让未登录用户访问注册页面：
+        $this->middleware('guest',[
+            'only'=>['create']
+        ]);
+    }
     /*
     login
     */
@@ -24,8 +30,11 @@ class SessionController extends Controller
         if(Auth::attempt($credentials,$request->has('remember'))){
             //认证通过
             session()->flash('success','欢迎回来！');
+            //
+            $fallback = route('users.show',Auth::user());
             //Laravel 提供的 Auth::user() 方法来获取 当前登录用户 的信息
-            return redirect()->route('users.show',[Auth::user()]);
+            //return redirect()->route('users.show',[Auth::user()]);
+            return redirect()->intended($fallback);//跳转到之前意图前往的页面，否则跳转到默认页面
         }else{
             //未通过
             //使用 withInput() 后模板里old('email') 将能获取到上一次用户提交的内容，这样用户就无需再次输入邮箱等内容：
