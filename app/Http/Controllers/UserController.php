@@ -9,12 +9,17 @@ class UserController extends Controller
 {
     public function __construct(){
         $this->middleware('auth',[
-            'except'=>['show','create','store']
+            'except'=>['show','create','store','index']
         ]);
 
         $this->middleware('guest', [
             'only' => ['create']
         ]);
+    }
+    public function index(){
+        $users = User::paginate(1);
+        // dd($users);
+        return view('users.index',compact('users'));
     }
     public function create(){
         return view('users.create');
@@ -70,5 +75,12 @@ class UserController extends Controller
         ]);*/
         session()->flash('success','资料修改成功！');
         return redirect()->route('users.show',$user);
+    }
+
+    public function destroy(User $user){
+        $this->authorize('destroy',$user);
+        $user->delete();
+        session()->flash('success','成功删除用户!');
+        return back();
     }
 }
